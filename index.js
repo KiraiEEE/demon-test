@@ -37,6 +37,9 @@ app.listen(port, async () => {
 })
 
 
+
+
+
 app.get('/users', getAllUsers);
 app.get('/users/:id', getUserById);
 app.post('/users', createUser);
