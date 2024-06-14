@@ -36,10 +36,6 @@ app.listen(port, async () => {
 
 })
 
-
-
-
-
 app.get('/users', getAllUsers);
 app.get('/users/:id', getUserById);
 app.post('/users', createUser);
@@ -50,7 +46,6 @@ app.post('/users/login', loginUser);
 app.post('/users/signup', signUpUser);
 
 app.post('/users/loginwithjwt', loginUserWithJWT);
-
 
 app.get('/branches', getAllBranches);
 app.get('/branches/:id', getBranchById);
@@ -73,8 +68,6 @@ app.delete('/donetasks/:id', deleteDoneTask);
 app.get('/donetasks/currenttime', getDoneTasksByCurrentTime);
 app.get('/donetasks/date', getDoneTasksByDate);
 
-
-
 app.get('/equipments', getAllEquipment);
 app.get('/equipments/:id', getEquipmentById);
 app.post('/equipments', createEquipment);
@@ -95,7 +88,6 @@ app.delete('/rooms/:id', deleteRoom);
 
 app.post('/rooms/resetStatuses', resetAllRoomStatuses);
 
-
 app.get('/tasks', getAllTasks);
 app.get('/tasks/:id', getTaskById);
 app.post('/tasks', createTask);
@@ -112,19 +104,14 @@ app.delete('/documentations/:id', deleteDocumentation);
 
 import fs from 'fs';
 
-// Check if the 'images' directory exists, if not create it
 if (!fs.existsSync('./images')) {
     fs.mkdirSync('./images', { recursive: true });
 }
 
-// Check if the 'files' directory exists, if not create it
 if (!fs.existsSync('./files')) {
     fs.mkdirSync('./files', { recursive: true });
 }
 
-
-
-// Set up storage engine for multer
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './images');
@@ -137,10 +124,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-// Initialize upload variable
 const upload = multer({ storage: storage });
 
-// Route to upload a file
 app.post('/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'Please upload a file.' });
@@ -148,11 +133,9 @@ app.post('/upload', upload.single('image'), (req, res) => {
     res.status(201).json({ message: 'File uploaded successfully', fileName: req.file.filename });
 });
 
-// Define __dirname in ES module scope
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Route to retrieve a file
 app.get('/images/:filename', (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'images', filename);
@@ -164,7 +147,6 @@ app.get('/images/:filename', (req, res) => {
 });
 
 
-// Set up storage engine for multer for general files
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './files');
@@ -174,10 +156,8 @@ const fileStorage = multer.diskStorage({
     }
 });
 
-// Initialize upload variable for files
 const uploadFile = multer({ storage: fileStorage });
 
-// Route to upload a general file
 app.post('/files', uploadFile.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'Please upload a file.' });
@@ -185,7 +165,6 @@ app.post('/files', uploadFile.single('file'), (req, res) => {
     res.status(201).json({ message: 'File uploaded successfully', fileName: req.file.filename });
 });
 
-// Route to retrieve a general file
 app.get('/files/:filename', (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'files', filename);
@@ -195,7 +174,6 @@ app.get('/files/:filename', (req, res) => {
         }
     });
 });
-
 
 import natural from 'natural';
 const TfIdf = natural.TfIdf;
