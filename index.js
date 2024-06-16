@@ -12,6 +12,8 @@ import { getAllTasks, getTaskById, createTask, updateTask, deleteTask } from "./
 import { getAllChecklists, getChecklistById, createChecklist, updateChecklist, deleteChecklist } from "./controllers/ChecklistController.js";
 import { getAllDocumentations, getDocumentationById, createDocumentation, updateDocumentation, deleteDocumentation } from "./controllers/DocumentationController.js";
 
+
+
 const app = express();
 app.use(cors()); 
 app.use(express.json());
@@ -32,6 +34,7 @@ const connectToDatabase = async () => {
 app.listen(port, async () => {
     await connectToDatabase();
     console.log(`💫 Server live on port ${port}`);
+
 
 
 })

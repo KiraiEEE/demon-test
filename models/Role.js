@@ -9,12 +9,10 @@ export default class Role extends Model {
 }
 
 Role.init({
-  SuperAdmin: DataTypes.BOOLEAN,
-  Admin: DataTypes.BOOLEAN,
-  Tech: DataTypes.BOOLEAN
+  roomID: DataTypes.INTEGER,
+  roomName: DataTypes.STRING
 }, {
   sequelize,
   modelName: 'Role',
   tableName: 'Roles'
 });
-

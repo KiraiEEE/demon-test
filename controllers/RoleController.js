@@ -25,10 +25,10 @@ export const getRoleById = async (req, res) => {
 };
 
 export const createRole = async (req, res) => {
-    const { SuperAdmin, Admin, Tech } = req.body;
+    const { roomID, roomName } = req.body;
     try {
         const newRole = await Role.create({
-            SuperAdmin, Admin, Tech
+            roomID, roomName
         });
         res.status(201).json(newRole);
     } catch (error) {
@@ -38,13 +38,12 @@ export const createRole = async (req, res) => {
 
 export const updateRole = async (req, res) => {
     const roleId = req.params.id;
-    const { SuperAdmin, Admin, Tech } = req.body;
+    const { roomID, roomName } = req.body;
     try {
         const role = await Role.findByPk(roleId);
         if (role) {
-            role.SuperAdmin = SuperAdmin;
-            role.Admin = Admin;
-            role.Tech = Tech;
+            role.roomID = roomID;
+            role.roomName = roomName;
             await role.save();
             res.status(200).json(role);
         } else {

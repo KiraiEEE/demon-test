@@ -9,14 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      SuperAdmin: {
-        type: Sequelize.BOOLEAN
+      roomID: {
+        type: Sequelize.INTEGER
       },
-      Admin: {
-        type: Sequelize.BOOLEAN
-      },
-      Tech: {
-        type: Sequelize.BOOLEAN
+      roomName: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

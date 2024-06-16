@@ -12,7 +12,6 @@ export const getAllDoneTasks = async (req, res) => {
     }
 }
 
-
 export const getDoneTaskById = async (req, res) => {
     const doneTaskID = req.params.id;
     try {
@@ -27,12 +26,9 @@ export const getDoneTaskById = async (req, res) => {
     }
 }
 
-
-
-
-
 export const createDoneTask = async (req, res) => {
-    const { taskID, equipmentID, date, photo, okay, problem, solution, userID, roomID } = req.body;
+    const { taskID, equipmentID, photo, okay, problem, solution, userID, roomID } = req.body;
+    const date = new Date(); // Use the current date and time as the creation date
     try {
         const doneTask = await DoneTask.create({
             taskID,
@@ -90,7 +86,6 @@ export const deleteDoneTask = async (req, res) => {
     }
 }
 
-
 export const getDoneTasksByDate = async (req, res) => {
     const { day, month, year } = req.query;
 
@@ -113,7 +108,6 @@ export const getDoneTasksByDate = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
-
 
 export const getDoneTasksByCurrentTime = async (req, res) => {
     const { timeFrame } = req.query; // timeFrame can be 'day', 'month', 'week', 'year'
