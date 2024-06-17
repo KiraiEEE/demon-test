@@ -218,6 +218,7 @@ app.get('/search/donetasks', async (req, res) => {
 
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEN_AI_KEY);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
@@ -259,9 +260,6 @@ app.get('/ask', async (req, res) => {
         res.status(500).json({ message: 'Failed to generate response', error: error.toString() });
     }
 });
-
-
-
 
 
 app.get('/userrooms/:userId', async (req, res) => {
