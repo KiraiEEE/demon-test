@@ -190,20 +190,72 @@ app.get('/search/donetasks', async (req, res) => {
     
     try {
         const doneTasks = await getAllDoneTasks();
-        const documents = doneTasks.map(task => task.problem);
-        documents.forEach(doc => tfidf.addDocument(doc));
+        const documents = doneTasks.map(task => ({ id: task.id, problem: task.problem }));
+        documents.forEach(doc => tfidf.addDocument(doc.problem));
         
         const scores = [];
         tfidf.tfidfs(searchText, (i, measure) => {
-            scores.push({ index: i, score: measure });
+            scores.push({ id: documents[i].id, score: measure });
         });
 
+        if (scores.length === 0) {
+            return res.status(404).json({ message: 'No solution found' });
+        }
+
         const sortedScores = scores.sort((a, b) => b.score - a.score);
-        const topMatchIndex = sortedScores[0].index;
-        const bestMatch = doneTasks[topMatchIndex];
+        const bestMatchId = sortedScores[0].id;
+        const bestMatch = doneTasks.find(task => task.id === bestMatchId);
+
+        if (!bestMatch) {
+            return res.status(404).json({ message: 'No solution found' });
+        }
 
         res.json({ similarProblem: bestMatch.problem, solution: bestMatch.solution });
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving doneTasks', error: error.message });
+    }
+});
+
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEN_AI_KEY);
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+});
+const generationConfig = {
+  temperature: 1,
+  topP: 0.95,
+  topK: 64,
+  maxOutputTokens: 8192,
+  responseMimeType: "text/plain",
+};
+app.get('/ask', async (req, res) => {
+    const prompt = req.query.prompt;
+    if (!prompt) {
+        return res.status(400).json({ message: 'No prompt provided' });
+    }
+    const modifiedPrompt = `inc context of maintenance how to fix ${prompt} (short 5 words max answer please)`;
+    try {
+        const chatSession = model.startChat({
+            generationConfig,
+            history: [
+                {
+                    role: "user",
+                    parts: [
+                        {text: `${modifiedPrompt}\n`},
+                    ],
+                },
+                {
+                    role: "model",
+                    parts: [
+                        {text: "Hello! What can I do for you today? \n"},
+                    ],
+                },
+            ],
+        });
+        const result = await chatSession.sendMessage(modifiedPrompt);
+        res.json({ response: result.response.text() });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to generate response', error: error.toString() });
     }
 });
