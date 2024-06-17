@@ -9,6 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+<<<<<<< HEAD
       SuperAdmin: {
         type: Sequelize.BOOLEAN
       },
@@ -17,6 +18,13 @@ module.exports = {
       },
       Tech: {
         type: Sequelize.BOOLEAN
+=======
+      roomID: {
+        type: Sequelize.INTEGER
+      },
+      roomName: {
+        type: Sequelize.STRING
+>>>>>>> master
       },
       createdAt: {
         allowNull: false,
