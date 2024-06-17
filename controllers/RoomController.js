@@ -71,7 +71,6 @@ export const deleteRoom = async (req, res) => {
 };
 
 
-
 export const resetAllRoomStatuses = async (req, res) => {
     try {
         await Room.update({ status: 0 }, { where: {} });
@@ -80,3 +79,5 @@ export const resetAllRoomStatuses = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
+
+

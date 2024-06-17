@@ -259,3 +259,24 @@ app.get('/ask', async (req, res) => {
         res.status(500).json({ message: 'Failed to generate response', error: error.toString() });
     }
 });
+
+
+
+
+
+app.get('/userrooms/:userId', async (req, res) => {
+const userId = req.params.userId;
+try {
+    const user = await sequelize.models.User.findByPk(userId);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    const branchID = user.branchID;
+    const rooms = await sequelize.models.Room.findAll({
+        where: { branchID: branchID }
+    });
+    res.json(rooms);
+} catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve rooms', error: error.toString() });
+}
+});
