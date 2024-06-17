@@ -12,11 +12,8 @@ import { getAllTasks, getTaskById, createTask, updateTask, deleteTask } from "./
 import { getAllChecklists, getChecklistById, createChecklist, updateChecklist, deleteChecklist } from "./controllers/ChecklistController.js";
 import { getAllDocumentations, getDocumentationById, createDocumentation, updateDocumentation, deleteDocumentation } from "./controllers/DocumentationController.js";
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> master
 const app = express();
 app.use(cors()); 
 app.use(express.json());
@@ -39,13 +36,8 @@ app.listen(port, async () => {
     console.log(`💫 Server live on port ${port}`);
 
 
-<<<<<<< HEAD
-})
-
-=======
 
 })
->>>>>>> master
 
 app.get('/users', getAllUsers);
 app.get('/users/:id', getUserById);
@@ -58,10 +50,6 @@ app.post('/users/signup', signUpUser);
 
 app.post('/users/loginwithjwt', loginUserWithJWT);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 app.get('/branches', getAllBranches);
 app.get('/branches/:id', getBranchById);
 app.post('/branches', createBranch);
@@ -83,11 +71,6 @@ app.delete('/donetasks/:id', deleteDoneTask);
 app.get('/donetasks/currenttime', getDoneTasksByCurrentTime);
 app.get('/donetasks/date', getDoneTasksByDate);
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
 app.get('/equipments', getAllEquipment);
 app.get('/equipments/:id', getEquipmentById);
 app.post('/equipments', createEquipment);
@@ -108,10 +91,6 @@ app.delete('/rooms/:id', deleteRoom);
 
 app.post('/rooms/resetStatuses', resetAllRoomStatuses);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 app.get('/tasks', getAllTasks);
 app.get('/tasks/:id', getTaskById);
 app.post('/tasks', createTask);
@@ -128,28 +107,14 @@ app.delete('/documentations/:id', deleteDocumentation);
 
 import fs from 'fs';
 
-<<<<<<< HEAD
-// Check if the 'images' directory exists, if not create it
-=======
->>>>>>> master
 if (!fs.existsSync('./images')) {
     fs.mkdirSync('./images', { recursive: true });
 }
 
-<<<<<<< HEAD
-// Check if the 'files' directory exists, if not create it
-=======
->>>>>>> master
 if (!fs.existsSync('./files')) {
     fs.mkdirSync('./files', { recursive: true });
 }
 
-<<<<<<< HEAD
-
-
-// Set up storage engine for multer
-=======
->>>>>>> master
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './images');
@@ -162,15 +127,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-<<<<<<< HEAD
-// Initialize upload variable
 const upload = multer({ storage: storage });
 
-// Route to upload a file
-=======
-const upload = multer({ storage: storage });
-
->>>>>>> master
 app.post('/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'Please upload a file.' });
@@ -178,17 +136,9 @@ app.post('/upload', upload.single('image'), (req, res) => {
     res.status(201).json({ message: 'File uploaded successfully', fileName: req.file.filename });
 });
 
-<<<<<<< HEAD
-// Define __dirname in ES module scope
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Route to retrieve a file
-=======
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
->>>>>>> master
 app.get('/images/:filename', (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'images', filename);
@@ -200,10 +150,6 @@ app.get('/images/:filename', (req, res) => {
 });
 
 
-<<<<<<< HEAD
-// Set up storage engine for multer for general files
-=======
->>>>>>> master
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './files');
@@ -213,15 +159,8 @@ const fileStorage = multer.diskStorage({
     }
 });
 
-<<<<<<< HEAD
-// Initialize upload variable for files
 const uploadFile = multer({ storage: fileStorage });
 
-// Route to upload a general file
-=======
-const uploadFile = multer({ storage: fileStorage });
-
->>>>>>> master
 app.post('/files', uploadFile.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'Please upload a file.' });
@@ -229,10 +168,6 @@ app.post('/files', uploadFile.single('file'), (req, res) => {
     res.status(201).json({ message: 'File uploaded successfully', fileName: req.file.filename });
 });
 
-<<<<<<< HEAD
-// Route to retrieve a general file
-=======
->>>>>>> master
 app.get('/files/:filename', (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'files', filename);
@@ -243,10 +178,6 @@ app.get('/files/:filename', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 import natural from 'natural';
 const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
@@ -259,19 +190,6 @@ app.get('/search/donetasks', async (req, res) => {
     
     try {
         const doneTasks = await getAllDoneTasks();
-<<<<<<< HEAD
-        const documents = doneTasks.map(task => task.problem);
-        documents.forEach(doc => tfidf.addDocument(doc));
-        
-        const scores = [];
-        tfidf.tfidfs(searchText, (i, measure) => {
-            scores.push({ index: i, score: measure });
-        });
-
-        const sortedScores = scores.sort((a, b) => b.score - a.score);
-        const topMatchIndex = sortedScores[0].index;
-        const bestMatch = doneTasks[topMatchIndex];
-=======
         const documents = doneTasks.map(task => ({ id: task.id, problem: task.problem }));
         documents.forEach(doc => tfidf.addDocument(doc.problem));
         
@@ -291,7 +209,6 @@ app.get('/search/donetasks', async (req, res) => {
         if (!bestMatch) {
             return res.status(404).json({ message: 'No solution found' });
         }
->>>>>>> master
 
         res.json({ similarProblem: bestMatch.problem, solution: bestMatch.solution });
     } catch (error) {
@@ -300,8 +217,6 @@ app.get('/search/donetasks', async (req, res) => {
 });
 
 
-<<<<<<< HEAD
-=======
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEN_AI_KEY);
@@ -363,4 +278,3 @@ try {
     res.status(500).json({ message: 'Failed to retrieve rooms', error: error.toString() });
 }
 });
->>>>>>> master
