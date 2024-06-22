@@ -152,3 +152,27 @@ export const getDoneTasksByCurrentTime = async (req, res) => {
     }
 };
 
+export const getTodayDoneTasks = async (req, res) => {
+    const currentDate = new Date();
+    const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+
+    try {
+        const doneTasks = await DoneTask.findAll({
+            where: {
+                date: {
+                    [sequelize.Op.gte]: startOfDay,
+                    [sequelize.Op.lt]: endOfDay
+                }
+            }
+        });
+
+        if (doneTasks.length > 0) {
+            res.status(200).json(doneTasks);
+        } else {
+            res.status(404).json({ message: "No done tasks found for today." });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};

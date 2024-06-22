@@ -3,28 +3,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Roles', {
-      id: {
+      roleID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-<<<<<<< HEAD
-      SuperAdmin: {
-        type: Sequelize.BOOLEAN
-      },
-      Admin: {
-        type: Sequelize.BOOLEAN
-      },
-      Tech: {
-        type: Sequelize.BOOLEAN
-=======
-      roomID: {
-        type: Sequelize.INTEGER
-      },
-      roomName: {
-        type: Sequelize.STRING
->>>>>>> master
+      roleName: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
