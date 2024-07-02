@@ -1,5 +1,3 @@
-// controllers/DoneTasksController.js
-
 import DoneTask from '../models/DoneTask.js'; 
 
 export const getAllDoneTasks = async (req, res) => {
@@ -151,3 +149,30 @@ export const getDoneTasksByCurrentTime = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
+
+
+
+export const getDoneTasksPaginated = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    try {
+        const { count, rows } = await DoneTask.findAndCountAll({
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            order: [['date', 'DESC']]
+        });
+
+        const totalPages = Math.ceil(count / limit);
+
+        res.status(200).json({
+            doneTasks: rows,
+            currentPage: parseInt(page),
+            totalPages: totalPages,
+            totalItems: count
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+

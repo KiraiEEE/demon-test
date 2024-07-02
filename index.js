@@ -4,7 +4,7 @@ import multer from 'multer';
 import { sequelize } from "./config/database.js";
 import { getAllUsers, getUserById, createUser, updateUser, deleteUser, loginUser, signUpUser, loginUserWithJWT } from "./controllers/UserController.js";
 import { getAllBranches, getBranchById, createBranch, updateBranch, deleteBranch } from "./controllers/BranchController.js";
-import { getAllDoneTasks, getDoneTasksByCurrentTime, getDoneTasksByDate,getDoneTaskById, createDoneTask, updateDoneTask, deleteDoneTask } from "./controllers/DoneTaskController.js";
+import { getAllDoneTasks, getDoneTasksByCurrentTime, getDoneTasksByDate,getDoneTaskById, createDoneTask, updateDoneTask, deleteDoneTask, getDoneTasksPaginated } from "./controllers/DoneTaskController.js";
 import { getAllEquipment, getEquipmentById, createEquipment, updateEquipment, deleteEquipment } from "./controllers/EquipmentController.js";
 import { getAllRoles, getRoleById, createRole, updateRole, deleteRole } from "./controllers/RoleController.js";
 import { getAllRooms, getRoomById, createRoom, updateRoom, deleteRoom, resetAllRoomStatuses } from "./controllers/RoomController.js";
@@ -12,6 +12,22 @@ import { getAllTasks, getTaskById, createTask, updateTask, deleteTask } from "./
 import { getAllChecklists, getChecklistById, createChecklist, updateChecklist, deleteChecklist } from "./controllers/ChecklistController.js";
 import { getAllDocumentations, getDocumentationById, createDocumentation, updateDocumentation, deleteDocumentation } from "./controllers/DocumentationController.js";
 
+/*
+import https from 'https';
+import fs from 'fs';
+
+const httpsOptions = {
+  key: fs.readFileSync('private-key.pem'),
+  cert: fs.readFileSync('certificate.pem')
+};
+const server = https.createServer(httpsOptions, app);
+
+server.listen(port, async () => {
+  await connectToDatabase();
+  console.log(`💫 HTTPS Server live on port ${port}`);
+});
+
+*/
 
 
 const app = express();
@@ -29,14 +45,9 @@ const connectToDatabase = async () => {
 }
 
 
-
-
 app.listen(port, async () => {
     await connectToDatabase();
     console.log(`💫 Server live on port ${port}`);
-
-
-
 })
 
 app.get('/users', getAllUsers);
@@ -63,6 +74,7 @@ app.put('/checklists/:id', updateChecklist);
 app.delete('/checklists/:id', deleteChecklist);
 
 app.get('/donetasks', getAllDoneTasks);
+app.get('/donetasks/paginated', getDoneTasksPaginated);
 app.get('/donetasks/:id', getDoneTaskById);
 app.post('/donetasks', createDoneTask);
 app.put('/donetasks/:id', updateDoneTask);
